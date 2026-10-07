@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Studio</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="he-root" data-theme="black" id="root">
+    <div class="he-topbar">
+      <div class="he-logo"><span class="he-logo-dot"></span>HTML Studio</div>
+      <div class="he-dropdown">
+        <button class="he-btn" id="tplBtn">📋 Templates ▾</button>
+        <div class="he-menu he-scroll" id="tplMenu" style="display:none"></div>
+      </div>
+      <button class="he-btn" id="openBtn">📂 Open</button>
+      <input type="file" id="fileInput" multiple style="display:none">
+      <button class="he-btn" id="newBtn" title="New group (HTML + CSS + JS)">➕ New</button>
+      <button class="he-btn" id="fmtBtn">✨ Format</button>
+      <button class="he-btn" id="saveBtn">💾 Save</button>
+      <button class="he-btn primary" id="runBtn">▶ Run</button>
+      <button class="he-btn" id="newTabBtn">↗ New Tab</button>
+      <button class="he-btn" id="exportBtn" title="Download project as .zip">📦 Export</button>
+      <button class="he-btn" id="searchBtn">🔍 Find</button>
+      <button class="he-btn" id="settingsBtn">⚙ Settings</button>
+      <input type="file" id="backupInput" accept=".json,application/json" style="display:none">
+      <div class="he-spacer"></div>
+      <select class="he-select" id="themeSelect" title="Theme">
+        <option value="black">Black theme</option>
+        <option value="grey">Grey theme</option>
+        <option value="white">White theme</option>
+        <option value="retro">Retro theme</option>
+      </select>
+    </div>
+
+    <div class="he-tabbar he-scroll" id="tabbar"></div>
+
+    <div class="he-main" id="main">
+      <div class="he-explorer" data-panel="explorer">
+        <div class="he-explorer-head">
+          <span class="he-grip" title="Drag to rearrange">⠿</span>
+          <button class="he-win" data-win="min" title="Minimize">–</button>
+          <button class="he-win" data-win="max" title="Maximize">▢</button>
+          <div class="he-view-tabs">
+            <button class="he-view-tab active" data-view="project">📁 Project</button>
+            <button class="he-view-tab" data-view="library">📚 Library</button>
+          </div>
+          <div class="he-spacer"></div>
+          <button class="he-exp-btn" id="newFileBtn" title="New file">📄＋</button>
+          <button class="he-exp-btn" id="newFolderBtn" title="New folder">📁＋</button>
+          <button class="he-exp-btn" id="newSnippetBtn" title="New snippet" style="display:none">📚＋</button>
+        </div>
+        <div class="he-explorer-body he-scroll" id="explorerBody"></div>
+      </div>
+
+      <div class="he-pages" data-panel="pages">
+        <div class="he-pages-head">
+          <span class="he-grip" title="Drag to rearrange">⠿</span>
+          <button class="he-win" data-win="min" title="Minimize">–</button>
+          <button class="he-win" data-win="max" title="Maximize">▢</button>
+          <span>🗂 Pages</span>
+          <div class="he-spacer"></div>
+          <button class="he-exp-btn" id="pagesNewBtn" title="New file">＋</button>
+        </div>
+        <div class="he-pages-body he-scroll" id="pagesBody"></div>
+      </div>
+
+      <div class="he-side" data-panel="editor">
+        <div class="he-editor-head" id="editorHead">
+          <span class="he-grip" title="Drag to rearrange">⠿</span>
+          <button class="he-win" data-win="min" title="Minimize">–</button>
+          <button class="he-win" data-win="max" title="Maximize">▢</button>
+          <span class="he-seg active" id="activeGroupName">Project</span>
+          <div class="he-spacer"></div>
+          <button class="he-btn he-mini" id="findInEditorBtn" title="Find (Ctrl+F)">🔍</button>
+        </div>
+        <div class="he-search" id="searchBar" style="display:none">
+          <div class="he-search-row">
+            <input type="text" id="searchInput" placeholder="Find across files">
+            <input type="text" id="replaceInput" placeholder="Replace" style="display:none">
+            <button class="he-btn he-mini" id="toggleReplaceBtn">▸ Replace</button>
+            <span id="searchCount" style="color:var(--muted);font-size:.72rem;white-space:nowrap">0 matches</span>
+            <button class="he-btn he-mini" id="searchPrev">↑</button>
+            <button class="he-btn he-mini" id="searchNext">↓</button>
+            <button class="he-btn he-mini" id="replaceBtn" style="display:none">Replace</button>
+            <button class="he-btn he-mini primary" id="replaceAllBtn" style="display:none">All</button>
+            <button class="he-btn he-mini" id="closeSearchBtn">✕</button>
+          </div>
+          <div class="he-search-opts">
+            <span class="he-search-opt" id="optCase">Aa Case</span>
+            <span class="he-search-opt" id="optWord">⬚ Word</span>
+            <span class="he-search-opt" id="optRegex">.* Regex</span>
+          </div>
+          <div class="he-search-results he-scroll" id="searchResults"></div>
+        </div>
+        <div class="he-editor-wrap" id="editorWrap">
+          <div class="he-panes" id="panes"></div>
+          <div class="he-drop-overlay" id="dropOverlay" style="display:none">Drop files to open in new tabs</div>
+        </div>
+      </div>
+
+      <div class="he-side" data-panel="preview">
+        <div class="he-preview-head">
+          <span class="he-grip" title="Drag to rearrange">⠿</span>
+          <button class="he-win" data-win="min" title="Minimize">–</button>
+          <button class="he-win" data-win="max" title="Maximize">▢</button>
+          <span>👁 Preview</span>
+          <div class="he-spacer"></div>
+          <button class="he-btn" id="refreshBtn" style="padding:.25rem .5rem">Refresh</button>
+          <button class="he-btn" id="openNewBtn" style="padding:.25rem .5rem">Open ↗</button>
+        </div>
+        <iframe class="he-preview-frame" id="preview" title="preview" sandbox="allow-scripts allow-modals allow-forms allow-popups"></iframe>
+      </div>
+    </div>
+
+    <div class="he-taskbar" id="taskbar" style="display:none"></div>
+    <div class="he-console" id="console">
+      <div class="he-console-head">
+        <div class="he-bottom-tabs">
+          <button class="he-bottom-tab active" data-bt="console">🖥 Console</button>
+          <button class="he-bottom-tab" data-bt="terminal">⌨ Terminal</button>
+        </div>
+        <div class="he-spacer"></div>
+        <button class="he-btn" style="padding:.2rem .5rem;font-size:.75rem" id="clrBtn">Clear</button>
+        <button class="he-btn" style="padding:.2rem .5rem;font-size:.75rem" id="hideConsole">Hide</button>
+      </div>
+      <div class="he-console-body he-scroll" id="consoleBody" style="max-height:26vh"></div>
+      <div class="he-console-body he-scroll he-term" id="termBody" style="display:none;max-height:26vh">
+        <div id="termLines"></div>
+        <div class="he-term-input-row"><span class="he-term-prompt">$</span><input class="he-term-input" id="termInput" placeholder="Type a command (help, ls, admin, set, out…)" /></div>
+      </div>
+    </div>
+
+    <button class="he-btn" id="showConsole" style="display:none;margin:.4rem .6rem;align-self:flex-start">🖥 Show console (0)</button>
+
+    <div class="he-modal-overlay" id="snippetModal" style="display:none">
+      <div class="he-modal">
+        <div class="he-modal-head" id="snippetModalHead">New Snippet</div>
+        <div class="he-modal-body">
+          <input type="text" id="snipName" placeholder="Snippet name">
+          <select id="snipLang"><option value="html">HTML</option><option value="css">CSS</option><option value="js">JS</option></select>
+          <textarea id="snipCode" placeholder="Snippet code..."></textarea>
+        </div>
+        <div class="he-modal-foot">
+          <button class="he-btn" id="snipCancel">Cancel</button>
+          <button class="he-btn primary" id="snipSave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="he-modal-overlay" id="settingsModal" style="display:none">
+    <div class="he-modal wide">
+      <div class="he-modal-head">⚙ Settings</div>
+      <div class="he-modal-body">
+        <div class="he-set-section" style="border-top:0;padding-top:0">
+          <div class="he-set-title">General</div>
+          <div class="he-set-row"><label style="min-width:90px">App name</label><input type="text" id="setName" placeholder="HTML Studio"></div>
+          <div class="he-set-row"><label style="min-width:90px">Theme</label><select id="setTheme" style="flex:1"></select></div>
+          <div class="he-set-row"><label style="min-width:90px">Side tabs</label><input type="checkbox" id="setSideTabs"><span style="color:var(--muted);font-size:.78rem">Move open tabs into the pages sidebar</span></div>
+        </div>
+        <div class="he-set-section">
+          <div class="he-set-title">Personal themes (saved to local storage)</div>
+          <div id="customThemeList"></div>
+          <div class="he-set-row"><input type="text" id="themeName" placeholder="New theme name" style="flex:1"><button class="he-btn primary" id="saveThemeBtn">Save theme</button></div>
+          <div class="he-set-grid" id="colorGrid"></div>
+        </div>
+        <div class="he-set-section">
+          <div class="he-set-title">Preview stats overlay (in-window preview &amp; new tab)</div>
+          <div class="he-set-row">
+            <label style="min-width:50px">FPS</label><input type="checkbox" id="setFps">
+            <label style="min-width:50px">RAM</label><input type="checkbox" id="setRam">
+            <label style="min-width:50px">DOM</label><input type="checkbox" id="setDom">
+            <span style="color:var(--muted);font-size:.78rem">Live counters</span>
+          </div>
+        </div>
+        <div class="he-set-section">
+          <div class="he-set-title">Studio Language (advanced terminal — admin only)</div>
+          <div class="he-set-row"><label style="min-width:90px">Password</label><input type="text" id="setTermPass" placeholder="admin" style="flex:1"></div>
+          <div class="he-manual-wrap he-scroll" id="slManual"></div>
+        </div>
+        <div class="he-set-section">
+          <div class="he-set-title">Backup (project, snippets, themes &amp; settings)</div>
+          <div class="he-set-row"><button class="he-btn" id="exportBackupBtn">⬇ Download backup</button><button class="he-btn" id="importBackupBtn">⬆ Restore backup</button></div>
+        </div>
+      </div>
+      <div class="he-modal-foot"><button class="he-btn primary" id="settingsDone">Done</button></div>
+    </div>
+  </div>
+
+  <div class="he-ctx" id="ctxMenu" style="display:none"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
